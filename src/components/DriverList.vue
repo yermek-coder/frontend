@@ -4,13 +4,27 @@
 			<thead>
 				<tr>
 					<th>№</th>
-					<th @click="setSelectedSort('Name')">Имя <i class="fas fa-sort"></i></th>
-					<th @click="setSelectedSort('Sure_name')">Фамилия <i class="fas fa-sort"></i></th>
-					<th @click="setSelectedSort('Date_of_birth')">Дата рождения <i class="fas fa-sort"></i></th>
-					<th @click="setSelectedSort('number')">Моб.телефон <i class="fas fa-sort"></i></th>
-					<th @click="setSelectedSort('Created')">Дата регистрации <i class="fas fa-sort"></i></th>
-					<th @click="setSelectedSort('Auto')">Автомобиль <i class="fas fa-sort"></i></th>
-					<th @click="setSelectedSort('Auto_number')">Госномер <i class="fas fa-sort"></i></th>
+					<th 
+						@click="setSelectedSort('Name'); toggleSortReverse()"
+					>Имя <i v-if="selectedSort == 'Name'" class="fas fa-sort"></i></th>
+					<th 
+						@click="setSelectedSort('Sure_name'); toggleSortReverse()"
+					>Фамилия <i v-if="selectedSort == 'Sure_name'" class="fas fa-sort"></i></th>
+					<th 
+						@click="setSelectedSort('Date_of_birth'); toggleSortReverse()"
+					>Дата рождения <i v-if="selectedSort == 'Date_of_birth'" class="fas fa-sort"></i></th>
+					<th 
+						@click="setSelectedSort('number'); toggleSortReverse()"
+					>Моб.телефон <i v-if="selectedSort == 'number'" class="fas fa-sort"></i></th>
+					<th 
+						@click="setSelectedSort('Created'); toggleSortReverse()"
+					>Дата регистрации <i v-if="selectedSort == 'Created'" class="fas fa-sort"></i></th>
+					<th 
+						@click="setSelectedSort('Auto'); toggleSortReverse()"
+					>Автомобиль <i v-if="selectedSort == 'Auto'" class="fas fa-sort"></i></th>
+					<th 
+						@click="setSelectedSort('Auto_number'); toggleSortReverse()"
+					>Госномер <i v-if="selectedSort == 'Auto_number'" class="fas fa-sort"></i></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -31,11 +45,13 @@ export default {
   methods: {
     ...mapMutations({
       setSelectedSort: 'driver/setSelectedSort',
+			toggleSortReverse: 'driver/toggleSortReverse'
     })
   },
 	computed: {
 		...mapState({
-			selectedSort: state => state.driver.selectedSort
+			selectedSort: state => state.driver.selectedSort,
+			isSortReversed: state => state.driver.isSortReversed
 		}),
 		...mapGetters({
       paginatedDrivers: 'driver/paginatedDrivers'

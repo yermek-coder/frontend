@@ -1,10 +1,12 @@
 import axios from "axios";
+import moment from 'moment';
 
 export const dispetcherModule = {
     state: () => ({
 				dispetchers: [],
         isDispetchersLoading: false,
         selectedSort: '',
+				isSortReversed: false,
 				selectedId: '',
         searchQuery: '',
         page: 1,
@@ -36,11 +38,24 @@ export const dispetcherModule = {
 			},
 			setNewDispetcher(state, newDispetcher) {
 				state.newDispetcher = newDispetcher
+			},
+			toggleSortReverse(state) {
+				if (state.isSortReversed == false) {
+					state.isSortReversed = true;
+				} else {
+					state.isSortReversed = false
+				}
 			}
 		},
     getters: {
         sortedDispetchers(state) {
-            return [...state.dispetchers].sort((dispetcher1, dispetcher2) => dispetcher1[state.selectedSort]?.localeCompare(dispetcher2[state.selectedSort]))
+					const list = [...state.dispetchers].sort((dispetcher1, dispetcher2) => dispetcher1[state.selectedSort]?.localeCompare(dispetcher2[state.selectedSort]))
+					if (state.isSortReversed) {
+						return list
+					} else {
+						return list.reverse()
+					}
+            //return [...state.dispetchers].sort((dispetcher1, dispetcher2) => dispetcher1[state.selectedSort]?.localeCompare(dispetcher2[state.selectedSort]))
         },
         sortedAndSearchedDispetchers(state, getters) {
 					return getters.sortedDispetchers.filter(dispetcher => dispetcher.Name.toLowerCase().includes(state.searchQuery.toLowerCase()) || dispetcher.Sure_name.toLowerCase().includes(state.searchQuery.toLowerCase()))
@@ -57,8 +72,12 @@ export const dispetcherModule = {
                 commit('setLoading', true);
                 const response = await axios.get('http://127.0.0.1:8000/api/dispetchery', {
                 });
-                commit('setTotalPages', Math.ceil(response.data['length'] / state.limit))
-                commit('setDispetchers', response.data)
+                commit('setTotalPages', Math.ceil(response.data.results['length'] / state.limit))
+								response.data.results.forEach(function(item) {
+									moment.locale('ru');
+									item.Created = moment(String(item.Created)).format('DD MMMM YYYY');
+								});
+                commit('setDispetchers', response.data.results)
             } catch (e) {
 							alert('Error fetching')
             } finally {

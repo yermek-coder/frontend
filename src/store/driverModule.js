@@ -1,10 +1,12 @@
 import axios from "axios";
+import moment from 'moment';
 
 export const driverModule = {
     state: () => ({
         drivers: [],
         isDriversLoading: false,
         selectedSort: '',
+				isSortReversed: false,
         searchQuery: '',
         page: 1,
         limit: 10,
@@ -24,6 +26,13 @@ export const driverModule = {
 			setSelectedSort(state, selectedSort) {
 					state.selectedSort = selectedSort
 			},
+			toggleSortReverse(state) {
+				if (state.isSortReversed == false) {
+					state.isSortReversed = true;
+				} else {
+					state.isSortReversed = false
+				}
+			},
 			setTotalPages(state, totalPages) {
 					state.totalPages = totalPages
 			},
@@ -36,7 +45,13 @@ export const driverModule = {
 		},
     getters: {
         sortedDrivers(state) {
-            return [...state.drivers].sort((driver1, driver2) => driver1[state.selectedSort]?.localeCompare(driver2[state.selectedSort]))
+					const list = [...state.drivers].sort((driver1, driver2) => driver1[state.selectedSort]?.localeCompare(driver2[state.selectedSort]))
+					if (state.isSortReversed) {
+						return list
+					} else {
+						return list.reverse()
+					}
+            // return [...state.drivers].sort((driver1, driver2) => !isSortReversed ? driver1[state.selectedSort]?.localeCompare(driver2[state.selectedSort]) : driver2[state.selectedSort]?.localeCompare(driver1[state.selectedSort]))
         },
         sortedAndSearchedDrivers(state, getters) {
             return getters.sortedDrivers.filter(driver => driver.Name.toLowerCase().includes(state.searchQuery.toLowerCase()) || driver.Sure_name.toLowerCase().includes(state.searchQuery.toLowerCase()))
@@ -53,8 +68,12 @@ export const driverModule = {
 							commit('setLoading', true);
 							const response = await axios.get('http://127.0.0.1:8000/api/voditeli/', {
 							});
-							commit('setTotalPages', Math.ceil(response.data['length'] / state.limit))
-							commit('setDrivers', response.data)
+							commit('setTotalPages', Math.ceil(response.data.results['length'] / state.limit))
+							response.data.results.forEach(function(item) {
+								moment.locale('ru');
+								item.Created = moment(String(item.Created)).format('DD MMMM YYYY');
+							});
+							commit('setDrivers', response.data.results)
 					} catch (e) {
 						alert('Error fetching')
 					} finally {

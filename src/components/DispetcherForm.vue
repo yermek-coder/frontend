@@ -38,7 +38,7 @@
 					<my-input
 						v-model="dispetcher.Email"
 						type="text"
-						placeholder="Модель Автомобиля"
+						placeholder="Email"
 					/>
 				</li>
 			</ul>

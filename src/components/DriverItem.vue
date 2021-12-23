@@ -12,6 +12,7 @@
 </template>
 
 <script>
+//2021-12-21T12:33:29.707336+06:00
 import {mapState, mapGetters, mapActions, mapMutations} from 'vuex';
 export default {
   props: {
@@ -26,9 +27,9 @@ export default {
 		}),
 	},
 	computed: {
-		...mapState({
-      selectedId: state => state.driver.selectedId
-    }),
+		// ...mapState({
+    //   selectedId: state => state.driver.selectedId
+    // }),
 	}
 }
 </script>

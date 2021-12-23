@@ -4,12 +4,12 @@
 			<thead>
 				<tr>
 					<th>№</th>
-					<th @click="setSelectedSort('Name')">Имя <i class="fas fa-sort"></i></th>
-					<th @click="setSelectedSort('Sure_name')">Фамилия <i class="fas fa-sort"></i></th>
-					<th @click="setSelectedSort('Date_of_birth')">Дата рождения <i class="fas fa-sort"></i></th>
-					<th @click="setSelectedSort('number')">Моб.телефон <i class="fas fa-sort"></i></th>
-					<th @click="setSelectedSort('Created')">Дата регистрации <i class="fas fa-sort"></i></th>
-					<th @click="setSelectedSort('Email')">e-mail <i class="fas fa-sort"></i></th>
+					<th @click="setSelectedSort('Name'); toggleSortReverse()">Имя <i v-if="selectedSort == 'Name'" class="fas fa-sort"></i></th>
+					<th @click="setSelectedSort('Sure_name'); toggleSortReverse()">Фамилия <i v-if="selectedSort == 'Sure_name'" class="fas fa-sort"></i></th>
+					<th @click="setSelectedSort('Date_of_birth'); toggleSortReverse()">Дата рождения <i v-if="selectedSort == 'Date_of_birth'" class="fas fa-sort"></i></th>
+					<th @click="setSelectedSort('number'); toggleSortReverse()">Моб.телефон <i v-if="selectedSort == 'number'" class="fas fa-sort"></i></th>
+					<th @click="setSelectedSort('Created'); toggleSortReverse()">Дата регистрации <i v-if="selectedSort == 'Created'" class="fas fa-sort"></i></th>
+					<th @click="setSelectedSort('Email'); toggleSortReverse()">e-mail <i v-if="selectedSort == 'Email'" class="fas fa-sort"></i></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -36,11 +36,13 @@ export default {
   methods: {
     ...mapMutations({
       setSelectedSort: 'dispetcher/setSelectedSort',
+			toggleSortReverse: 'dispetcher/toggleSortReverse'
     })
   },
 	computed: {
 		...mapState({
-			selectedSort: state => state.dispetcher.selectedSort
+			selectedSort: state => state.dispetcher.selectedSort,
+			isSortReversed: state => state.dispetcher.isSortReversed
 		}),
 		...mapGetters({
       paginatedDispetchers: 'dispetcher/paginatedDispetchers'
