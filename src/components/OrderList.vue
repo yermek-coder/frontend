@@ -1,31 +1,31 @@
 <template>
 	<div>
-		<table v-if="paginatedDrivers.length > 0" class="GeneratedTable">
+		<table v-if="paginatedOrders.length > 0" class="GeneratedTable">
 			<thead>
 				<tr>
 					<th>№</th>
 					<th 
-						@click="setSelectedSort('Name_vod'); toggleSortReverse()"
-					>Ф.И.О. <i v-if="selectedSort == 'Name_vod'" class="fas fa-sort"></i></th>
+						@click="setSelectedSort('Name_people'); toggleSortReverse()"
+					>Ф.И.О. <i v-if="selectedSort == 'Name_people'" class="fas fa-sort"></i></th>
 					<th
-						@click="setSelectedSort('Date_of_birth'); toggleSortReverse()"
-					>Дата рождения <i v-if="selectedSort == 'Date_of_birth'" class="fas fa-sort"></i></th>
+						@click="setSelectedSort('Name_vodil'); toggleSortReverse()"
+					>Дата рождения <i v-if="selectedSort == 'Name_vodil'" class="fas fa-sort"></i></th>
 					<th 
-						@click="setSelectedSort('number'); toggleSortReverse()"
+						@click="setSelectedSort('Marshrut'); toggleSortReverse()"
 					>Моб.телефон <i v-if="selectedSort == 'number'" class="fas fa-sort"></i></th>
 					<th 
 						@click="setSelectedSort('Created'); toggleSortReverse()"
 					>Дата регистрации <i v-if="selectedSort == 'Created'" class="fas fa-sort"></i></th>
 					<th 
-						@click="setSelectedSort('Auto'); toggleSortReverse()"
+						@click="setSelectedSort('Status'); toggleSortReverse()"
 					>Автомобиль <i v-if="selectedSort == 'Auto'" class="fas fa-sort"></i></th>
 					<th 
-						@click="setSelectedSort('Auto_number'); toggleSortReverse()"
+						@click="setSelectedSort('Order_number'); toggleSortReverse()"
 					>Госномер <i v-if="selectedSort == 'Auto_number'" class="fas fa-sort"></i></th>
 				</tr>
 			</thead>
 			<tbody>
-					<driver-item v-for="driver in paginatedDrivers" :driver="driver" :key="driver.id"></driver-item>
+					<order-item v-for="order in paginatedOrders" :order="order" :key="order.id"></order-item>
 			</tbody>
 		</table>
 		<h2 v-else style="color: red">
@@ -35,23 +35,23 @@
 </template>
 
 <script>
-import DriverItem from "@/components/DriverItem";
+import OrderItem from "@/components/OrderItem";
 import {mapState, mapGetters, mapActions, mapMutations} from 'vuex'
 export default {
-  components: {DriverItem},
+  components: {OrderItem},
   methods: {
     ...mapMutations({
-      setSelectedSort: 'driver/setSelectedSort',
-			toggleSortReverse: 'driver/toggleSortReverse'
+      setSelectedSort: 'order/setSelectedSort',
+			toggleSortReverse: 'order/toggleSortReverse'
     })
   },
 	computed: {
 		...mapState({
-			selectedSort: state => state.driver.selectedSort,
-			isSortReversed: state => state.driver.isSortReversed
+			selectedSort: state => state.order.selectedSort,
+			isSortReversed: state => state.order.isSortReversed
 		}),
 		...mapGetters({
-      paginatedDrivers: 'driver/paginatedDrivers'
+      paginatedOrders: 'order/paginatedOrders'
     })
 	}
 }

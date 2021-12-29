@@ -1,12 +1,12 @@
 <template>
-  <tr @click="$router.push(`drivers/${driver.id}`); setSelectedId(this.driver.id)" class="driver">
-		<td style="width: 50px">{{driver.id}}</td>
-		<td>{{driver.Name_vod}}</td>
-		<td>{{driver.Date_of_birth}}</td>
-		<td>{{driver.number}}</td>
-		<td>{{driver.Created}}</td>
-		<td>{{driver.Auto}}</td>
-		<td>{{driver.Auto_number}}</td>
+  <tr @click="$router.push(`orders/${order.id}`); setSelectedId(this.order.id)" class="order">
+		<td style="width: 50px">{{order.id}}</td>
+		<td>{{order.Name_people}}</td>
+		<td>{{order.Name_vodil}}</td>
+		<td>{{order.Marshrut}}</td>
+		<td>{{order.Created}}</td>
+		<td>{{order.Status}}</td>
+		<td>{{order.Order_number}}</td>
   </tr>
 </template>
 
@@ -15,21 +15,21 @@
 import {mapMutations} from 'vuex';
 export default {
   props: {
-    driver: {
+    order: {
       type: Object,
       required: true,
     }
   },
 	methods: {
 		...mapMutations({
-			setSelectedId: 'driver/setSelectedId'
+			setSelectedId: 'order/setSelectedId'
 		}),
 	}
 }
 </script>
 
 <style scoped>
-/* .driver {
+/* .order {
   padding: 15px;
   border: 2px solid teal;
   margin-top: 15px;
@@ -37,7 +37,7 @@ export default {
   align-items: center;
   justify-content: space-between;
 }
-.driver__btns {
+.order__btns {
   display: flex;
 } */
 table.GeneratedTable td{

@@ -1,24 +1,24 @@
 import axios from "axios";
 import moment from 'moment';
 
-export const driverModule = {
+export const orderModule = {
     state: () => ({
-        drivers: [],
-        isDriversLoading: false,
+        orders: [],
+        isOrdersLoading: false,
         selectedSort: '',
 				isSortReversed: false,
         searchQuery: '',
         page: 1,
         limit: 10,
         totalPages: 0,
-				newDriver: {}
+				newOrder: {}
     }),
 		mutations: {
-			setDrivers(state, drivers) {
-					state.drivers = drivers;
+			setOrders(state, orders) {
+					state.orders = orders;
 			},
 			setLoading(state, bool) {
-					state.isDriversLoading = bool
+					state.isOrdersLoading = bool
 			},
 			setPage(state, page) {
 					state.page = page
@@ -39,35 +39,34 @@ export const driverModule = {
 			setSearchQuery(state, searchQuery) {
 					state.searchQuery = searchQuery
 			},
-			setNewDriver(state, newDriver) {
-				state.newDriver = newDriver
+			setNewOrder(state, newOrder) {
+				state.newOrder = newOrder
 			}
 		},
     getters: {
-        sortedDrivers(state) {
-					const list = [...state.drivers].sort((driver1, driver2) => driver1[state.selectedSort]?.localeCompare(driver2[state.selectedSort]))
+        sortedOrders(state) {
+					const list = [...state.orders].sort((order1, order2) => order1[state.selectedSort]?.localeCompare(order2[state.selectedSort]))
 					if (state.isSortReversed) {
 						return list
 					} else {
 						return list.reverse()
 					}
-            // return [...state.drivers].sort((driver1, driver2) => !isSortReversed ? driver1[state.selectedSort]?.localeCompare(driver2[state.selectedSort]) : driver2[state.selectedSort]?.localeCompare(driver1[state.selectedSort]))
+            // return [...state.orders].sort((order1, order2) => !isSortReversed ? order1[state.selectedSort]?.localeCompare(order2[state.selectedSort]) : order2[state.selectedSort]?.localeCompare(order1[state.selectedSort]))
         },
-        sortedAndSearchedDrivers(state, getters) {
-            return getters.sortedDrivers.filter(driver => driver.Name_vod.toLowerCase().includes(state.searchQuery.toLowerCase()))
-						// || driver.Sure_name.toLowerCase().includes(state.searchQuery.toLowerCase()
+        sortedAndSearchedOrders(state, getters) {
+            return getters.sortedOrders.filter(order => order.Name_people.toLowerCase().includes(state.searchQuery.toLowerCase()) || order.Name_vodil.toLowerCase().includes(state.searchQuery.toLowerCase()))
         },
-				paginatedDrivers(state, getters) {
+				paginatedOrders(state, getters) {
 					let from = (state.page-1)*state.limit
 					let to = from + state.limit
-					return getters.sortedAndSearchedDrivers.slice(from, to)
+					return getters.sortedAndSearchedOrders.slice(from, to)
 				}
     },
     actions: {
-        async fetchDrivers({state, commit}) {
+        async fetchOrders({state, commit}) {
 					try {
 							commit('setLoading', true);
-							const response = await axios.get('http://127.0.0.1:8000/api/voditeli/', {
+							const response = await axios.get('http://127.0.0.1:8000/api/orders/', {
 							});
 							console.log(response);
 							commit('setTotalPages', Math.ceil(response.data.results['length'] / state.limit))
@@ -75,17 +74,17 @@ export const driverModule = {
 								moment.locale('ru');
 								item.Created = moment(String(item.Created)).format('DD MMMM YYYY');
 							});
-							commit('setDrivers', response.data.results)
+							commit('setOrders', response.data.results)
 					} catch (e) {
 						alert('Error fetching')
 					} finally {
 							commit('setLoading', false);
 					}
         },
-				async postDriver({state, dispatch}) {
+				async postOrder({state, dispatch}) {
 					try {
-						await axios.post('http://127.0.0.1:8000/api/voditeli/', state.newDriver);
-						await dispatch('fetchDrivers');
+						await axios.post('http://127.0.0.1:8000/api/voditeli/', state.newOrder);
+						await dispatch('fetchOrders');
 					} catch (e) {
 						alert('Error posting')
 					} finally {
