@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<table v-if="paginatedDispetchers.length > 0" class="GeneratedTable">
+		<table v-if="dispetchers.length > 0" class="GeneratedTable">
 			<thead>
 				<tr>
 					<th>№</th>
@@ -13,7 +13,7 @@
 				</tr>
 			</thead>
 			<tbody>
-					<dispetcher-item v-for="dispetcher in paginatedDispetchers" :dispetcher="dispetcher"	:key="dispetcher.id"></dispetcher-item>
+					<dispetcher-item v-for="dispetcher in dispetchers" :dispetcher="dispetcher"	:key="dispetcher.id"></dispetcher-item>
 			</tbody>
 		</table>
 		<h2 v-else style="color: red">
@@ -42,12 +42,21 @@ export default {
 	computed: {
 		...mapState({
 			selectedSort: state => state.dispetcher.selectedSort,
+			dispetchers: state => state.dispetcher.dispetchers,
 			isSortReversed: state => state.dispetcher.isSortReversed
 		}),
-		...mapGetters({
-      paginatedDispetchers: 'dispetcher/paginatedDispetchers'
-    })
-	}
+		// ...mapGetters({
+    //   dispetchers: 'dispetcher/dispetchers'
+    // })
+	},
+	watch: {
+    page() {
+      this.fetchDrivers()
+    },
+		searchQuery() {
+			this.fetchDrivers()
+		}
+  }
 }
 </script>
 

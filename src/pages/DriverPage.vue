@@ -1,5 +1,4 @@
 <template>
-
   <div style="position: relative">
 		<router-view></router-view>
     <div class="app__btns">
@@ -26,7 +25,7 @@
       @remove="removeDriver"
       v-if="!isDriversLoading"
     />
-    <div v-else>Идет загрузка...</div>
+    <my-loading v-else></my-loading>
     <div class="page__wrapper">
       <div
         v-for="pageNumber in totalPages"
@@ -45,14 +44,12 @@
 </template>
 
 <script>
-//:drivers="paginatedDrivers"
 import DriverForm from "@/components/DriverForm";
 import DriverList from "@/components/DriverList";
-
 import MyButton from "@/components/UI/MyButton";
-// import axios from 'axios';
 import MySelect from "@/components/UI/MySelect";
 import MyInput from "@/components/UI/MyInput";
+import MyLoadingCircle from "@/components/UI/MyLoadingCircle";
 import {mapState, mapGetters, mapActions, mapMutations} from 'vuex';
 
 export default {
@@ -61,7 +58,8 @@ export default {
     MySelect,
     MyButton,
     DriverList,
-		DriverForm
+		DriverForm,
+		MyLoadingCircle
   },
   data() {
     return {
@@ -113,9 +111,12 @@ export default {
     })
   },
   watch: {
-    // page() {
-    //   this.fetchDrivers()
-    // }
+    page() {
+      this.fetchDrivers()
+    },
+		searchQuery() {
+			this.fetchDrivers()
+		}
   }
 }
 </script>
@@ -145,4 +146,6 @@ export default {
   height: 30px;
   background: green;
 }
+
+
 </style>

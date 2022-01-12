@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<table v-if="paginatedDrivers.length > 0" class="GeneratedTable">
+		<table v-if="drivers.length > 0" class="GeneratedTable">
 			<thead>
 				<tr>
 					<th>№</th>
@@ -25,7 +25,7 @@
 				</tr>
 			</thead>
 			<tbody>
-					<driver-item v-for="driver in paginatedDrivers" :driver="driver" :key="driver.id"></driver-item>
+					<driver-item v-for="driver in drivers" :driver="driver" :key="driver.id"></driver-item>
 			</tbody>
 		</table>
 		<h2 v-else style="color: red">
@@ -48,11 +48,12 @@ export default {
 	computed: {
 		...mapState({
 			selectedSort: state => state.driver.selectedSort,
+			drivers: state => state.driver.drivers,
 			isSortReversed: state => state.driver.isSortReversed
 		}),
-		...mapGetters({
-      paginatedDrivers: 'driver/paginatedDrivers'
-    })
+		// ...mapGetters({
+    //   sortedAndSearchedDrivers: 'driver/sortedAndSearchedDrivers'
+    // })
 	}
 }
 </script>

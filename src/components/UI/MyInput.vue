@@ -18,13 +18,13 @@ export default {
 
 <style scoped>
 .input {
-	font-family: FontAwesome, "Open Sans", sans-serif;
+	font-family: FontAwesome, 'Open Sans', sans-serif;
 	font-size: 13px;
-	font-weight: 500;
+	font-weight: 400;
   outline: 0;
   border-width: 0 0 1px;
   border-color: black;
-  padding: 9px 0;
+  padding: 5px 2px;
 	width: 100%;
 }
 

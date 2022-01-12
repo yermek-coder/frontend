@@ -16,7 +16,7 @@
       @remove="removeOrder"
       v-if="!isOrdersLoading"
     />
-    <div v-else>Идет загрузка...</div>
+    <my-loading v-else></my-loading>
     <div class="page__wrapper">
       <div
         v-for="pageNumber in totalPages"
@@ -40,6 +40,7 @@ import OrderList from "@/components/OrderList";
 import MyButton from "@/components/UI/MyButton";
 import MySelect from "@/components/UI/MySelect";
 import MyInput from "@/components/UI/MyInput";
+import MyLoadingCircle from "@/components/UI/MyLoadingCircle";
 import {mapState, mapGetters, mapActions, mapMutations} from 'vuex';
 
 export default {
@@ -48,6 +49,7 @@ export default {
     MySelect,
     MyButton,
     OrderList,
+		MyLoadingCircle
   },
   methods: {
     ...mapMutations({
@@ -90,9 +92,12 @@ export default {
     })
   },
   watch: {
-    // page() {
-    //   this.fetchOrders()
-    // }
+    page() {
+      this.fetchDrivers()
+    },
+		searchQuery() {
+			this.fetchDrivers()
+		}
   }
 }
 </script>

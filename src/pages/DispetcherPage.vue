@@ -25,7 +25,7 @@
       @remove="removeDispetcher"
       v-if="!isDispetchersLoading"
     />
-    <div v-else>Идет загрузка...</div>
+    <my-loading v-else></my-loading>
     <div class="page__wrapper">
       <div
         v-for="pageNumber in totalPages"
@@ -50,6 +50,7 @@ import MyButton from "@/components/UI/MyButton";
 // import axios from 'axios';
 import MySelect from "@/components/UI/MySelect";
 import MyInput from "@/components/UI/MyInput";
+import MyLoadingCircle from "@/components/UI/MyLoadingCircle";
 import {mapState, mapGetters, mapActions, mapMutations} from 'vuex'
 
 export default {
@@ -58,7 +59,8 @@ export default {
     MySelect,
     MyButton,
     DispetcherList,
-		DispetcherForm
+		DispetcherForm,
+		MyLoadingCircle
   },
   data() {
     return {

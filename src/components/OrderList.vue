@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<table v-if="paginatedOrders.length > 0" class="GeneratedTable">
+		<table v-if="orders.length > 0" class="GeneratedTable">
 			<thead>
 				<tr>
 					<th>№</th>
@@ -25,7 +25,7 @@
 				</tr>
 			</thead>
 			<tbody>
-					<order-item v-for="order in paginatedOrders" :order="order" :key="order.id"></order-item>
+					<order-item v-for="order in orders" :order="order" :key="order.id"></order-item>
 			</tbody>
 		</table>
 		<h2 v-else style="color: red">
@@ -48,11 +48,12 @@ export default {
 	computed: {
 		...mapState({
 			selectedSort: state => state.order.selectedSort,
+			orders: state => state.order.orders,
 			isSortReversed: state => state.order.isSortReversed
 		}),
-		...mapGetters({
-      paginatedOrders: 'order/paginatedOrders'
-    })
+		// ...mapGetters({
+    //   paginatedOrders: 'order/paginatedOrders'
+    // })
 	}
 }
 </script>

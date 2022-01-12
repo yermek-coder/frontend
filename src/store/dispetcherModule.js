@@ -48,31 +48,35 @@ export const dispetcherModule = {
 			}
 		},
     getters: {
-        sortedDispetchers(state) {
-					const list = [...state.dispetchers].sort((dispetcher1, dispetcher2) => dispetcher1[state.selectedSort]?.localeCompare(dispetcher2[state.selectedSort]))
-					if (state.isSortReversed) {
-						return list
-					} else {
-						return list.reverse()
-					}
-            //return [...state.dispetchers].sort((dispetcher1, dispetcher2) => dispetcher1[state.selectedSort]?.localeCompare(dispetcher2[state.selectedSort]))
-        },
-        sortedAndSearchedDispetchers(state, getters) {
-					return getters.sortedDispetchers.filter(dispetcher => dispetcher.Name.toLowerCase().includes(state.searchQuery.toLowerCase()) || dispetcher.Sure_name.toLowerCase().includes(state.searchQuery.toLowerCase()))
-        },
-				paginatedDispetchers(state, getters) {
-					let from = (state.page-1)*state.limit
-					let to = from + state.limit
-					return getters.sortedAndSearchedDispetchers.slice(from, to)
-				}
+        // sortedDispetchers(state) {
+				// 	const list = [...state.dispetchers].sort((dispetcher1, dispetcher2) => dispetcher1[state.selectedSort]?.localeCompare(dispetcher2[state.selectedSort]))
+				// 	if (state.isSortReversed) {
+				// 		return list
+				// 	} else {
+				// 		return list.reverse()
+				// 	}
+        //     //return [...state.dispetchers].sort((dispetcher1, dispetcher2) => dispetcher1[state.selectedSort]?.localeCompare(dispetcher2[state.selectedSort]))
+        // },
+        // sortedAndSearchedDispetchers(state, getters) {
+				// 	return getters.sortedDispetchers.filter(dispetcher => dispetcher.Name.toLowerCase().includes(state.searchQuery.toLowerCase()) || dispetcher.Sure_name.toLowerCase().includes(state.searchQuery.toLowerCase()))
+        // },
+				// paginatedDispetchers(state, getters) {
+				// 	let from = (state.page-1)*state.limit
+				// 	let to = from + state.limit
+				// 	return getters.sortedAndSearchedDispetchers.slice(from, to)
+				// }
     },
     actions: {
         async fetchDispetchers({state, commit}) {
             try {
                 commit('setLoading', true);
                 const response = await axios.get('http://127.0.0.1:8000/api/dispetchery', {
+									params: {
+										page: state.page,
+										search: state.searchQuery
+									}
                 });
-                commit('setTotalPages', Math.ceil(response.data.results['length'] / state.limit))
+                commit('setTotalPages', Math.ceil(response.data.count / state.limit))
 								response.data.results.forEach(function(item) {
 									moment.locale('ru');
 									item.Created = moment(String(item.Created)).format('DD MMMM YYYY');
