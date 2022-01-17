@@ -67,13 +67,12 @@ export const driverModule = {
         async fetchDrivers({state, commit}) {
 					try {
 							commit('setLoading', true);
-							const response = await axios.get('http://127.0.0.1:8000/api/voditeli/', {
+							const response = await axios.get('api/voditeli/', {
 								params: {
 									page: state.page,
 									search: state.searchQuery
 								}
 							});
-							console.log(state.page);
 							commit('setTotalPages', Math.ceil(response.data.count / state.limit))
 							response.data.results.forEach(function(item) {
 								moment.locale('ru');
@@ -88,13 +87,11 @@ export const driverModule = {
         },
 				async postDriver({state, dispatch}) {
 					try {
-						await axios.post('http://127.0.0.1:8000/api/voditeli/', state.newDriver);
+						await axios.post('api/voditeli/', state.newDriver);
 						await dispatch('fetchDrivers');
 					} catch (e) {
 						alert('Error posting')
-					} finally {
-							
-					}
+					} 
 				}
     },
     namespaced: true

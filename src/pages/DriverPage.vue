@@ -21,7 +21,6 @@
       />
     </my-dialog>
     <driver-list
-      
       @remove="removeDriver"
       v-if="!isDriversLoading"
     />

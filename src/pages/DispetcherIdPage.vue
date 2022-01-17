@@ -7,7 +7,7 @@
 		</div>
 		<div v-if="!isDispetchersLoading" class="user-info">
 			<div style="margin-right: 30px">
-				<img src="@/assets/images/default_user_pic.png" alt="User Photo">
+				<img src="@/assets/images/user-default-pic.svg" alt="User Photo">
 			</div>
 			<div class="user-info-table">
 				<table>

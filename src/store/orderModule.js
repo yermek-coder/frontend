@@ -43,30 +43,11 @@ export const orderModule = {
 				state.newOrder = newOrder
 			}
 		},
-    // getters: {
-    //     sortedOrders(state) {
-		// 			const list = [...state.orders].sort((order1, order2) => order1[state.selectedSort]?.localeCompare(order2[state.selectedSort]))
-		// 			if (state.isSortReversed) {
-		// 				return list
-		// 			} else {
-		// 				return list.reverse()
-		// 			}
-    //         // return [...state.orders].sort((order1, order2) => !isSortReversed ? order1[state.selectedSort]?.localeCompare(order2[state.selectedSort]) : order2[state.selectedSort]?.localeCompare(order1[state.selectedSort]))
-    //     },
-    //     sortedAndSearchedOrders(state, getters) {
-    //         return getters.sortedOrders.filter(order => order.Name_people.toLowerCase().includes(state.searchQuery.toLowerCase()) || order.Name_vodil.toLowerCase().includes(state.searchQuery.toLowerCase()))
-    //     },
-		// 		paginatedOrders(state, getters) {
-		// 			let from = (state.page-1)*state.limit
-		// 			let to = from + state.limit
-		// 			return getters.sortedAndSearchedOrders.slice(from, to)
-		// 		}
-    // },
     actions: {
         async fetchOrders({state, commit}) {
 					try {
 							commit('setLoading', true);
-							const response = await axios.get('http://127.0.0.1:8000/api/orders/', {
+							const response = await axios.get('api/orders/', {
 								params: {
 									page: state.page,
 									search: state.searchQuery
@@ -86,7 +67,7 @@ export const orderModule = {
         },
 				async postOrder({state, dispatch}) {
 					try {
-						await axios.post('http://127.0.0.1:8000/api/voditeli/', state.newOrder);
+						await axios.post('api/voditeli/', state.newOrder);
 						await dispatch('fetchOrders');
 					} catch (e) {
 						alert('Error posting')

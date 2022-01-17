@@ -6,16 +6,9 @@
 				<li>
 					<my-input
 						v-focus
-						v-model="driver.Name"
+						v-model="driver.Name_vod"
 						type="text"
-						placeholder="Имя"
-					/>
-				</li>
-				<li>
-					<my-input
-						v-model="driver.Sure_name"
-						type="text"
-						placeholder="Фамилия"
+						placeholder="Имя и фамилия"
 					/>
 				</li>
 				<li>
@@ -64,8 +57,7 @@ export default {
   data() {
     return {
       driver: {
-        Name: '',
-        Sure_name: '',
+        Name_vod: '',
         number: '',
         Auto: '',
         Auto_number: '',
@@ -78,8 +70,7 @@ export default {
       // this.driver.id = Date.now();
       this.$emit('create', this.driver)
       this.driver = {
-        Name: '',
-        Sure_name: '',
+        Name_vod: '',
         number: '',
         Auto: '',
         Auto_number: '',

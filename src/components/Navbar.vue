@@ -3,41 +3,50 @@
 		<router-link
 			to="/"
 			custom
-			v-slot="{ href, route, navigate, isActive }"
+			v-slot="{ href, navigate, isActive }"
 		>
-			<NavLink :href="href" @click="navigate" :class="{'isHomeActive': isActive, 'isNotHomeActive': !isActive}">
-			</NavLink>
+			<a :href="href" @click="navigate" :class="{'isHomeActive': isActive, 'isNotHomeActive': !isActive}">
+			</a>
 		</router-link>
     <div class="navbar__btns">
 			<router-link
 				to="/workers"
 				custom
-				v-slot="{ href, route, navigate, isActive }"
+				v-slot="{ href, navigate, isActive }"
 			>
-				<NavLink :href="href" @click="navigate" :class="{'isActive': isActive}">
+				<a class="link" title='Пользователи' :href="href" @click="navigate" :class="{'isActive': isActive}">
 					Пользователи
-				</NavLink>
+				</a>
 			</router-link>
 			<router-link
 				to="/order_history"
 				custom
-				v-slot="{ href, route, navigate, isActive }"
+				v-slot="{ href, navigate, isActive }"
 			>
-				<NavLink :href="href" @click="navigate" :class="{'isActive': isActive}">
+				<a class="link" title='История заказов' :href="href" @click="navigate" :class="{'isActive': isActive}">
 					История заказов
-				</NavLink>
+				</a>
 			</router-link>
 			<router-link
 				to="/settings"
 				custom
-				v-slot="{ href, route, navigate, isActive }"
+				v-slot="{ href, navigate, isActive }"
 			>
-				<NavLink :href="href" @click="navigate" :class="{'isActive': isActive}">
+				<a class="link" title='Настройки' :href="href" @click="navigate" :class="{'isActive': isActive}">
 					Настройки
-				</NavLink>
+				</a>
 			</router-link>
-
     </div>
+		<my-task-buttons></my-task-buttons>
+		<router-link
+			to="/user"
+			custom
+			v-slot="{ href, navigate, isActive }"
+			>
+			<a :href="href" @click="navigate" :class="{'user-icon-active': isActive, 'user-icon-passive': !isActive}">
+				<div class="user-icon"></div>
+			</a>
+		</router-link>
   </div>
 </template>
 
@@ -61,9 +70,31 @@ export default {
   padding: 0 40px;
 	color: white;
 	font-family: 'Open Sans', sans-serif;
+	text-align: center;
 }
 .navbar__btns {
   margin-right: auto;
+	margin-left: 2%;
+	display: flex;
+}
+.link {
+	font-weight: 300;
+	font-size: 18px;
+	margin-right: 33px;
+	text-decoration: none;
+	color: white;
+	display: inline-block;
+}
+.link:hover {
+	font-weight: 700;
+}
+.link::before {
+	display: block;
+	content: attr(title);
+	font-weight: 700;
+	height: 0px;
+	overflow: hidden;
+	visibility: hidden;
 }
 .image-wrapper {
 	max-height: 100%;
@@ -72,11 +103,10 @@ export default {
 	height: 40px;
 	margin-right: 33px;
 }
-NavLink {
-	margin-right: 33px;
-}
+
 .isActive {
 	position: relative;
+	font-weight: 700;
 }
 .isActive::after {
 	position: absolute;
@@ -89,16 +119,48 @@ NavLink {
 }
 .isNotHomeActive {
 	height: 40px;
-  width: 42px;
+  min-width: 42px;
 	background-image: url('~@/assets/images/home_passive.svg');
+	background-repeat: no-repeat;
+	background-size: contain;
+}
+.isNotHomeActive:hover {
+	height: 40px;
+  min-width: 42px;
+	background-image: url('~@/assets/images/home_active.svg');
 	background-repeat: no-repeat;
 	background-size: contain;
 }
 .isHomeActive {
 	height: 40px;
-  width: 42px;
+  min-width: 42px;
 	background-image: url('~@/assets/images/home_active.svg');
 	background-repeat: no-repeat;
 	background-size: contain;
 }
+.user-icon {
+	height: 55px;
+	width: 55px;
+	background-image: url('~@/assets/images/user-default-pic.svg');
+	background-repeat: no-repeat;
+	background-size: contain;
+}
+.user-icon-passive{
+	padding: 3px;
+	border: 4px solid rgba(255,255,255, 0);
+	border-radius: 500px;
+	transition: border .2s ease-in-out;
+}
+.user-icon-passive:hover{
+	padding: 3px;
+	border: 4px solid rgba(255, 255, 255, 0.5);
+	border-radius: 500px;
+}
+.user-icon-active {
+	padding: 3px;
+	border-radius: 500px;
+	border: 4px solid rgba(255,255,255, 1);
+}
+/* BUTTONS */
+
 </style>

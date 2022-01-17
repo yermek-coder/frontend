@@ -48,29 +48,13 @@ export const dispetcherModule = {
 			}
 		},
     getters: {
-        // sortedDispetchers(state) {
-				// 	const list = [...state.dispetchers].sort((dispetcher1, dispetcher2) => dispetcher1[state.selectedSort]?.localeCompare(dispetcher2[state.selectedSort]))
-				// 	if (state.isSortReversed) {
-				// 		return list
-				// 	} else {
-				// 		return list.reverse()
-				// 	}
-        //     //return [...state.dispetchers].sort((dispetcher1, dispetcher2) => dispetcher1[state.selectedSort]?.localeCompare(dispetcher2[state.selectedSort]))
-        // },
-        // sortedAndSearchedDispetchers(state, getters) {
-				// 	return getters.sortedDispetchers.filter(dispetcher => dispetcher.Name.toLowerCase().includes(state.searchQuery.toLowerCase()) || dispetcher.Sure_name.toLowerCase().includes(state.searchQuery.toLowerCase()))
-        // },
-				// paginatedDispetchers(state, getters) {
-				// 	let from = (state.page-1)*state.limit
-				// 	let to = from + state.limit
-				// 	return getters.sortedAndSearchedDispetchers.slice(from, to)
-				// }
-    },
+
+		},
     actions: {
         async fetchDispetchers({state, commit}) {
             try {
                 commit('setLoading', true);
-                const response = await axios.get('http://127.0.0.1:8000/api/dispetchery', {
+                const response = await axios.get('api/dispetchery', {
 									params: {
 										page: state.page,
 										search: state.searchQuery
@@ -90,7 +74,7 @@ export const dispetcherModule = {
         },
 				async postDispetcher({state, dispatch}) {
 					try {
-						await axios.post('http://127.0.0.1:8000/api/dispetchery/', state.newDispetcher);
+						await axios.post('api/dispetchery/', state.newDispetcher);
 						await dispatch('fetchDispetchers');
 					} catch (e) {
 						alert('Error posting')

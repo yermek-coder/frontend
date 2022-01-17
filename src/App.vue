@@ -1,5 +1,5 @@
 <template>
-  <navbar></navbar>
+  <navbar v-if="isAuth"></navbar>
   <div class="app">
     <router-view></router-view>
   </div>
@@ -7,11 +7,35 @@
 
 <script>
 import Navbar from "@/components/Navbar";
+import {mapState, mapActions, mapMutations} from 'vuex';
 
 export default {
   components: {
     Navbar
-  }
+  },
+	methods: {
+    ...mapMutations({
+			setUsername: 'login/setUsername',
+      setPassword: 'login/setPassword',
+			setAuth: 'login/setAuth'
+    }),
+    ...mapActions({
+      signIn: 'login/signIn',
+			logOut: 'login/logOut',
+			checkAuth: 'login/checkAuth'
+    }),
+	},
+	computed: {
+    ...mapState({
+      username: state => state.login.username,
+			password: state => state.login.password,
+      isAuth: state => state.login.isAuth,
+      isLoading: state => state.login.isLoading
+    })
+  },
+	mounted() {
+    this.checkAuth();
+  },
 }
 </script>
 

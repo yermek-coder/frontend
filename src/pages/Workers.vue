@@ -5,18 +5,18 @@
 			custom
 			v-slot="{ href, route, navigate, isActive}"
 		>
-			<NavLink :href="href" @click="navigate" :class="{'isActive': isActive}">
+			<a :href="href" @click="navigate" :class="{'isActive': isActive}">
 				Диспетчеры
-			</NavLink>
+			</a>
 		</router-link>	
 		<router-link
 			to="/workers/drivers"
 			custom
 			v-slot="{ href, route, navigate, isActive }"
 		>
-			<NavLink :href="href" @click="navigate" :class="{'isActive': isActive}">
+			<a :href="href" @click="navigate" :class="{'isActive': isActive}">
 				Водители
-			</NavLink>
+			</a>
 		</router-link>
 
   </div>
@@ -33,18 +33,22 @@ export default {
 .choise-bar {
 	border: 1px solid black;
 	display: flex;
-	width: fit-content;
-	height: fit-content;
-
+	align-items: center;
+	width: 344px;
+	height: 66px;
 }
-NavLink {
+a {
 	font-weight: 700;
 	font-size: 18px;
-	padding: 22px 25px;
-	width: 172px;
-	text-align: center;
+	width: 100%;
+	height: 100%;
+	text-decoration: none;
+	color: black;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
-NavLink:hover {
+a:hover {
 	background-color: #f1f1f1;
 }
 .isActive {

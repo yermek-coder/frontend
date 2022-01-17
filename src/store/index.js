@@ -2,6 +2,7 @@ import {createStore} from "vuex";
 import {driverModule} from "@/store/driverModule";
 import {dispetcherModule} from "@/store/dispetcherModule";
 import {orderModule} from "@/store/orderModule";
+import {loginModule} from "@/store/loginModule";
 
 export default createStore({
     state: {
@@ -10,6 +11,7 @@ export default createStore({
     modules: {
         driver: driverModule,
 				dispetcher: dispetcherModule,
-				order: orderModule
+				order: orderModule,
+				login: loginModule,
     }
 })

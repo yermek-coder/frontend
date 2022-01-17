@@ -21,7 +21,6 @@ export default {
   position: relative;
   margin: 0 auto;
   width: 75px;
-  height: 300px;
 }
 .loading-spinner:before {
   content: '';
@@ -30,9 +29,7 @@ export default {
 }
 .loading-spinner__circle-svg {
   animation: loading-spinner-rotate 1.28973s linear infinite;
-  height: 100%;
   transform-origin: center center;
-  width: 100%;
   position: absolute;
   top: 0;
   bottom: 0;
