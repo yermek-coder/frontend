@@ -7,20 +7,29 @@ export const loginModule = {
 				username: '',
         password: '',
         isAuth: false,
-				isLoading: false
+				isLoading: false,
+				passwordIsHidden: true,
+				passwordFieldType: "password"
     }),
 		mutations: {
-			setUsername(state, username) {
-					state.username = username;
+			setUsername(state, event) {
+					state.username = event.target.value
 			},
-			setPassword(state, password) {
-					state.password = password
+			setPassword(state, event) {
+					state.password = event.target.value
+			},
+			resetUserInfo(state) {
+				state.password = '',
+				state.username = ''
 			},
 			setLoading(state, bool) {
 				state.isLoading = bool
 			},
 			setIsAuth(state, bool) {
 					state.isAuth = bool
+			},
+			togglePasswordVisibility(state){
+				state.passwordIsHidden = !state.passwordIsHidden;
 			}
 		},
     actions: {
@@ -37,10 +46,9 @@ export const loginModule = {
 					} catch (e) {
 						alert('Error logging')
 					} finally {
-							commit('setUsername', '');
-							commit('setPassword', '');
 							commit('setLoading', false);
 							commit('setIsAuth', true);
+							commit('resetUserInfo');
 							router.push('/')
 					}
         },

@@ -2,26 +2,29 @@
 	<div class="container">
 		<form @submit.prevent>
 			<h3>Авторизация</h3>
-			<div class="form-inputs">
-				<ul style="margin-right: 22px">
+				<ul style="margin-right: 22px" class="form-inputs">
 					<li>
-						<my-input
+						<input
 							v-focus
-							@update:model-value="setUsername"
+							class="input"
+							@input="setUsername"
 							type="text"
 							placeholder="Логин"
 						/>
 					</li>
 					<li class="password">
-						<div :class="(passwordIsHidden)?'password-shown':'password-hidden'" @click="togglePasswordVisibility"></div>
-						<my-input
-							@update:model-value="setPassword"
-							:type="passwordFieldType"
+						<div 
+							:class="(passwordIsHidden)?'password-shown':'password-hidden'" 
+							@click="togglePasswordVisibility"
+						></div>
+						<input
+							class="input"
+							@input="setPassword"
+							:type="(passwordIsHidden)?'password':'text'"
 							placeholder="Пароль"
 						/>
 					</li>
 				</ul>
-			</div>
 			<my-button-large
 				style="justify-self: center;"
 				@click="signIn"
@@ -35,40 +38,25 @@
 
 <script>
 import MyLoadingCircle from "@/components/UI/MyLoadingCircle";
-import MyInput from "@/components/UI/MyInput";
 import MyButtonLarge from "@/components/UI/MyButtonLarge";
 import {mapState, mapActions, mapMutations} from 'vuex';
 
 export default {
   components: {
-    MyInput,
 		MyLoadingCircle,
 		MyButtonLarge
-  },
-	data() {
-    return {
-      passwordIsHidden: true,
-			passwordFieldType: 'password'
-    }
   },
   methods: {
     ...mapMutations({
 			setUsername: 'login/setUsername',
       setPassword: 'login/setPassword',
+			togglePasswordVisibility: 'login/togglePasswordVisibility'
     }),
     ...mapActions({
       signIn: 'login/signIn',
     }),
-		togglePasswordVisibility(){
-			this.passwordIsHidden = !this.passwordIsHidden;
-			if (this.passwordIsHidden) {
-				this.passwordFieldType = 'password'
-			} else {
-				this.passwordFieldType = 'text'
-			}
-		},
-		test(e) {
-			console.log(e);
+		log(e) {
+			console.log(e)
 		}
 	},
   computed: {
@@ -76,7 +64,8 @@ export default {
       username: state => state.login.username,
 			password: state => state.login.password,
       isAuth: state => state.login.isAuth,
-      isLoading: state => state.login.isLoading
+      isLoading: state => state.login.isLoading,
+      passwordIsHidden: state => state.login.passwordIsHidden,
     })
   }
 }
@@ -111,6 +100,16 @@ form {
 	display: flex;
   flex-direction: row;
 	justify-content: space-between;
+}
+.input {
+	font-family: FontAwesome, 'Open Sans', sans-serif;
+	font-size: 13px;
+	font-weight: 400;
+  outline: 0;
+  border-width: 0 0 1px;
+  border-color: black;
+  padding: 5px 2px;
+	width: 100%;
 }
 ul {
 	list-style-type:none;
