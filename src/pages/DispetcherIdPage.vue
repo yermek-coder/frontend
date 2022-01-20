@@ -5,23 +5,23 @@
 			<my-button style="margin-left:auto">Написать сообщение</my-button>
 			<my-button style="margin-left: 30px">Заблокировать</my-button>
 		</div>
-		<div v-if="!isDispetchersLoading" class="user-info">
+		<div class="user-info">
 			<div style="margin-right: 30px">
 				<img src="@/assets/images/user-default-pic.svg" alt="User Photo">
 			</div>
 			<div class="user-info-table">
 				<table>
 					<tr class="mb-27">
-						<th class="bold-big">{{dispetchers[$route.params.id-1]['Name']}} {{dispetchers[$route.params.id-1]['Sure_name']}}</th>
+						<th class="bold-big">{{currentItem.Name}} {{currentItem.Sure_name}}</th>
 						<td>Онлайн</td>
 					</tr>
 					<tr>
 						<th>Номер телефона:</th>
-						<td>{{dispetchers[$route.params.id-1]['Number']}}</td>
+						<td>{{currentItem.Number}}</td>
 					</tr>
 					<tr>
 						<th class="mb-35">E-mail:</th>
-						<td>{{dispetchers[$route.params.id-1]['Email']}}</td>
+						<td>{{currentItem.Email}}</td>
 					</tr>
 					<tr>
 						<th>ИИН:</th>
@@ -33,7 +33,7 @@
 					</tr>
 					<tr>
 						<th>Дата регистрации:</th>
-						<td>{{dispetchers[$route.params.id-1]['Created']}}</td>
+						<td>{{currentItem.Created}}</td>
 					</tr>
 				</table>
 			</div>
@@ -42,39 +42,49 @@
 </template>
 
 <script>
-import {mapState, mapMutations, mapGetters, mapActions} from 'vuex'
+import moment from 'moment';
 import MyButtonArrowLeft from '../components/UI/MyButtonArrowLeft.vue';
+import axios from "axios";
 export default {
 		components: {MyButtonArrowLeft},
 		data() {
     return {
       dialogVisible: false,
+			currentItem: {}
     }
   },
   methods: {
-    ...mapActions({
-      fetchDispetchers: 'dispetcher/fetchDispetchers',
-    }),
-    createDispetcher(dispetcher) {
+    createDriver(dispetcher) {
       this.dispetchers.push(dispetcher);
       this.dialogVisible = false;
     },
-    removeDispetcher(dispetcher) {
+    removeDriver(dispetcher) {
       this.dispetchers = this.dispetchers.filter(p => p.id !== dispetcher.id)
     },
     showDialog() {
       this.dialogVisible = true;
-    }
+    },
+		async fetchID(id) {
+			try {
+					const response = await axios.get(`api/dispetchery/${id}`);
+					const timeConverter = function(time) {
+						moment.locale('ru');
+						return moment(String(time)).format('DD MMMM YYYY');
+					};
+					response.data.Created = timeConverter(response.data.Created);
+					this.currentItem = response.data;
+			} catch (e) {
+				alert('Error fetching user data')
+			} 
+		},
   },
   mounted() {
-    this.fetchDispetchers();
+		this.fetchID(this.currentId)
   },
-	created() {this.fetchDispetchers()},
   computed: {
-    ...mapState({
-      dispetchers: state => state.dispetcher.dispetchers,
-      isDispetchersLoading: state => state.dispetcher.isDispetchersLoading,
-    })
+		currentId() {
+			return this.$route.params.id;
+    }
   }
 }
 </script>
@@ -87,15 +97,11 @@ export default {
 	display: flex;
 	padding-top: 38px;
 }
-.user-id-page {
-	position: absolute;
-	width: 100%;
-	min-height: 100%;
-	height: fit-content;
-	background-color: white;
-}
 .user-info-table {
 	width: 400px;
+}
+.user-id-page {
+	margin-top: 30px;
 }
 tr {
 	display: flex;

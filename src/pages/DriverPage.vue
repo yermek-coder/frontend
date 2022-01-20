@@ -1,43 +1,45 @@
 <template>
-  <div style="position: relative">
+  <div>
 		<router-view></router-view>
-    <div class="app__btns">
-			<my-input
-				:model-value="searchQuery"
-				@update:model-value="setSearchQuery"
-				placeholder=' &#xf002;  Поиск...'
-				v-focus
-				style="margin-left: 20px; font-size: 14px; border-color: #C4C4C4; border-width: 0 0 2px; width: 28%"
-    	/>
-      <my-button
-        @click="showDialog"
-      >
-        Добавить водителя
-      </my-button>
-    </div>
-    <my-dialog v-model:show="dialogVisible">
-      <driver-form
-        @create="createDriver"
-      />
-    </my-dialog>
-    <driver-list
-      @remove="removeDriver"
-      v-if="!isDriversLoading"
-    />
-    <my-loading v-else></my-loading>
-    <div class="page__wrapper">
-      <div
-        v-for="pageNumber in totalPages"
-        :key="pageNumber"
-        class="page"
-        :class="{
-              'current-page': page === pageNumber
-            }"
-        @click="setPage(pageNumber)"
-      >
-        {{ pageNumber }}
-      </div>
-    </div>
+		<div v-if="currentRouteName==='drivers'">
+			<div class="app__btns">
+				<my-input
+					:model-value="searchQuery"
+					@update:model-value="setSearchQuery"
+					placeholder=' &#xf002;  Поиск...'
+					v-focus
+					style="margin-left: 20px; font-size: 14px; border-color: #C4C4C4; border-width: 0 0 2px; width: 28%"
+				/>
+				<my-button
+					@click="showDialog"
+				>
+					Добавить водителя
+				</my-button>
+			</div>
+			<my-dialog v-model:show="dialogVisible">
+				<driver-form
+					@create="createDriver"
+				/>
+			</my-dialog>
+			<driver-list
+				@remove="removeDriver"
+				v-if="!isDriversLoading"
+			/>
+			<my-loading v-else></my-loading>
+			<div class="page__wrapper">
+				<div
+					v-for="pageNumber in totalPages"
+					:key="pageNumber"
+					class="page"
+					:class="{
+								'current-page': page === pageNumber
+							}"
+					@click="setPage(pageNumber)"
+				>
+					{{ pageNumber }}
+				</div>
+			</div>
+		</div>
   </div>
 
 </template>
@@ -107,7 +109,10 @@ export default {
       sortedDrivers: 'driver/sortedDrivers',
       sortedAndSearchedDrivers: 'driver/sortedAndSearchedDrivers',
       paginatedDrivers: 'driver/paginatedDrivers'
-    })
+    }),
+		currentRouteName() {
+			return this.$route.name;
+    }
   },
   watch: {
     page() {

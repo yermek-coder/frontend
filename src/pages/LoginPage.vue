@@ -1,70 +1,94 @@
 <template>
 	<div class="container">
-		<form @submit.prevent>
+		<Form @submit="onSubmit" >
 			<h3>Авторизация</h3>
-				<ul style="margin-right: 22px" class="form-inputs">
+				<ul class="form-inputs">
 					<li>
-						<input
+						<Field
 							v-focus
 							class="input"
-							@input="setUsername"
+							name="username"
+							@input="setErrorMessage('')"
 							type="text"
 							placeholder="Логин"
+							:rules="validateUsername"
 						/>
+						<ErrorMessage class="ErrorMessage" name="username" />
 					</li>
 					<li class="password">
 						<div 
 							:class="(passwordIsHidden)?'password-shown':'password-hidden'" 
 							@click="togglePasswordVisibility"
 						></div>
-						<input
+						<Field
 							class="input"
-							@input="setPassword"
+							@input="setErrorMessage('')"
+							name="password"
 							:type="(passwordIsHidden)?'password':'text'"
 							placeholder="Пароль"
+							:rules="validatePassword"
 						/>
+						<ErrorMessage class="ErrorMessage" name="password" />
 					</li>
 				</ul>
 			<my-button-large
+				type="submit"
 				style="justify-self: center;"
-				@click="signIn"
 			>
 				Войти
 			</my-button-large>
+			<p class="error-from-api">{{errorMessage}}</p>
 			<my-loading class="loading" v-if="isLoading"/>
-		</form>
+		</Form>
 	</div>
 </template>
 
 <script>
+import { Form, Field, ErrorMessage } from 'vee-validate';
 import MyLoadingCircle from "@/components/UI/MyLoadingCircle";
 import MyButtonLarge from "@/components/UI/MyButtonLarge";
 import {mapState, mapActions, mapMutations} from 'vuex';
-
+//				@click="signIn"  @input="setPassword"
 export default {
   components: {
 		MyLoadingCircle,
-		MyButtonLarge
+		MyButtonLarge,
+		Form,
+    Field,
+		ErrorMessage
   },
   methods: {
     ...mapMutations({
 			setUsername: 'login/setUsername',
       setPassword: 'login/setPassword',
-			togglePasswordVisibility: 'login/togglePasswordVisibility'
+			togglePasswordVisibility: 'login/togglePasswordVisibility',
+			setErrorMessage: 'login/setErrorMessage'
     }),
     ...mapActions({
       signIn: 'login/signIn',
     }),
-		log(e) {
-			console.log(e)
+		onSubmit(values) {
+      this.$store.commit('login/setUsername', values.username);
+      this.$store.commit('login/setPassword', values.password);
+      this.$store.dispatch('login/signIn');
+    },
+		validateUsername(value) {
+      if (value && value.trim()) {
+				return true;
+      }
+			return 'Поле не должно быть пустым';
+    },
+		validatePassword(value) {
+      if (value && value.trim()) {
+				return true;
+      }
+      return 'Поле не должно быть пустым';
 		}
 	},
   computed: {
     ...mapState({
-      username: state => state.login.username,
-			password: state => state.login.password,
-      isAuth: state => state.login.isAuth,
       isLoading: state => state.login.isLoading,
+      errorMessage: state => state.login.errorMessage,
       passwordIsHidden: state => state.login.passwordIsHidden,
     })
   }
@@ -98,7 +122,7 @@ form {
 }
 .form-inputs {
 	display: flex;
-  flex-direction: row;
+  flex-direction: column;
 	justify-content: space-between;
 }
 .input {
@@ -115,21 +139,21 @@ ul {
 	list-style-type:none;
 }
 li {
-	margin-bottom: 30px;
 	width: 240px;
+	height: 50px;
 }
 my-button-large {
 	justify-self: center;
 }
 .loading {
-position: absolute;
-display: flex;
-justify-content: center;
-align-items: center;
-right: 0;
-left: 0;
-top: 0;
-bottom: 0;
+	position: absolute;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	right: 0;
+	left: 0;
+	top: 0;
+	bottom: 0;
 }
 .password {
 	position: relative;
@@ -143,9 +167,8 @@ bottom: 0;
 	position: absolute;
 	width: 20px;
 	height: 20px;
-	top: 50%;
-  right: 0;
-	transform: translate(-50%, -50%);
+	top: 3px;
+  right: 5px;
 }
 .password-shown {
 	background-image: url('~@/assets/images/password-shown.svg');
@@ -156,8 +179,17 @@ bottom: 0;
 	position: absolute;
 	width: 20px;
 	height: 20px;
-	top: 50%;
-  right: 0;
-	transform: translate(-50%, -50%);
+	top: 3px;
+  right: 5px;
+}
+.ErrorMessage {
+	font-size: 12px;
+	color: red;
+}
+.error-from-api {
+	font-size: 12px;
+	color: red;
+	position: absolute;
+	bottom: 10px;
 }
 </style>

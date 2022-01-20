@@ -5,23 +5,23 @@
 			<my-button style="margin-left:auto">Написать сообщение</my-button>
 			<my-button style="margin-left: 30px">Заблокировать</my-button>
 		</div>
-		<div v-if="!isDriversLoading" class="user-info">
+		<div class="user-info">
 			<div style="margin-right: 30px">
 				<img src="@/assets/images/user-default-pic.svg" alt="User Photo">
 			</div>
 			<div class="user-info-table">
 				<table>
 					<tr class="mb-27">
-						<th class="bold-big">{{drivers[$route.params.id-1]['Name']}} {{drivers[$route.params.id-1]['Sure_name']}}</th>
+						<th class="bold-big">{{currentItem.Name_vod}}</th>
 						<td>Онлайн</td>
 					</tr>
 					<tr>
 						<th>Номер телефона:</th>
-						<td>{{drivers[$route.params.id-1]['number']}}</td>
+						<td>{{currentItem.number}}</td>
 					</tr>
 					<tr class="mb-24">
 						<th>Дата регистрации:</th>
-						<td>{{drivers[$route.params.id-1]['Created']}}</td>
+						<td>{{currentItem.Created}}</td>
 					</tr>
 					<tr>
 						<th>ИИН:</th>
@@ -33,7 +33,7 @@
 					</tr>
 					<tr>
 						<th>Модель автомобиля:</th>
-						<td>{{drivers[$route.params.id-1]['Auto']}}</td>
+						<td>{{currentItem.Auto}}</td>
 					</tr>
 					<tr>
 						<th>Год выпуска автомобиля:</th>
@@ -41,7 +41,7 @@
 					</tr>
 					<tr>
 						<th>Госномер:</th>
-						<td>{{drivers[$route.params.id-1]['Auto_number']}}</td>
+						<td>{{currentItem.Auto_number}}</td>
 					</tr>
 					<tr>
 						<th>Водительское удостоверение:</th>
@@ -55,19 +55,18 @@
 </template>
 
 <script>
-import {mapState, mapMutations, mapGetters, mapActions} from 'vuex'
+import moment from 'moment';
 import MyButtonArrowLeft from '../components/UI/MyButtonArrowLeft.vue';
+import axios from "axios";
 export default {
 		components: {MyButtonArrowLeft},
 		data() {
     return {
       dialogVisible: false,
+			currentItem: {}
     }
   },
   methods: {
-    ...mapActions({
-      fetchDrivers: 'driver/fetchDrivers',
-    }),
     createDriver(driver) {
       this.drivers.push(driver);
       this.dialogVisible = false;
@@ -77,17 +76,28 @@ export default {
     },
     showDialog() {
       this.dialogVisible = true;
-    }
+    },
+		async fetchID(id) {
+			try {
+					const response = await axios.get(`api/voditeli/${id}`);
+					const timeConverter = function(time) {
+						moment.locale('ru');
+						return moment(String(time)).format('DD MMMM YYYY');
+					};
+					response.data.Created = timeConverter(response.data.Created);
+					this.currentItem = response.data;
+			} catch (e) {
+				alert('Error fetching user data')
+			} 
+		},
   },
   mounted() {
-    this.fetchDrivers();
+		this.fetchID(this.currentId)
   },
-	created() {this.fetchDrivers()},
   computed: {
-    ...mapState({
-      drivers: state => state.driver.drivers,
-      isDriversLoading: state => state.driver.isDriversLoading,
-    })
+		currentId() {
+			return this.$route.params.id;
+    }
   }
 }
 </script>
@@ -100,15 +110,11 @@ export default {
 	display: flex;
 	padding-top: 38px;
 }
-.user-id-page {
-	position: absolute;
-	width: 100%;
-	min-height: 100%;
-	height: fit-content;
-	background-color: white;
-}
 .user-info-table {
 	width: 400px;
+}
+.user-id-page {
+	margin-top: 30px;
 }
 tr {
 	display: flex;

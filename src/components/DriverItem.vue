@@ -1,5 +1,5 @@
 <template>
-  <tr @click="$router.push(`drivers/${driver.id}`); setSelectedId(this.driver.id)" class="driver">
+  <tr @click="$router.push(`drivers/${driver.id}`)" class="driver">
 		<td style="width: 50px">{{driver.id}}</td>
 		<td>{{driver.Name_vod}}</td>
 		<td>{{driver.Date_of_birth}}</td>
@@ -11,35 +11,17 @@
 </template>
 
 <script>
-//2021-12-21T12:33:29.707336+06:00
-import {mapMutations} from 'vuex';
 export default {
   props: {
     driver: {
       type: Object,
       required: true,
     }
-  },
-	methods: {
-		...mapMutations({
-			setSelectedId: 'driver/setSelectedId'
-		}),
-	}
+  }
 }
 </script>
 
 <style scoped>
-/* .driver {
-  padding: 15px;
-  border: 2px solid teal;
-  margin-top: 15px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-.driver__btns {
-  display: flex;
-} */
 table.GeneratedTable td{
   border-width: 1px;
   border-color: #000000;

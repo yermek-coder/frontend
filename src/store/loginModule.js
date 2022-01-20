@@ -9,14 +9,15 @@ export const loginModule = {
         isAuth: false,
 				isLoading: false,
 				passwordIsHidden: true,
-				passwordFieldType: "password"
+				passwordFieldType: "password",
+				errorMessage: ''
     }),
 		mutations: {
-			setUsername(state, event) {
-					state.username = event.target.value
+			setUsername(state, username) {
+				state.username = username
 			},
-			setPassword(state, event) {
-					state.password = event.target.value
+			setPassword(state, password) {
+				state.password = password
 			},
 			resetUserInfo(state) {
 				state.password = '',
@@ -26,10 +27,13 @@ export const loginModule = {
 				state.isLoading = bool
 			},
 			setIsAuth(state, bool) {
-					state.isAuth = bool
+				state.isAuth = bool
 			},
 			togglePasswordVisibility(state){
 				state.passwordIsHidden = !state.passwordIsHidden;
+			},
+			setErrorMessage(state, error){
+				state.errorMessage = error
 			}
 		},
     actions: {
@@ -44,7 +48,7 @@ export const loginModule = {
 							localStorage.setItem('token', token);
 							axios.defaults.headers.get['Authorization'] = `Token ${token}`;
 					} catch (e) {
-						alert('Error logging')
+							commit('setErrorMessage', 'Неверные данные');
 					} finally {
 							commit('setLoading', false);
 							commit('setIsAuth', true);

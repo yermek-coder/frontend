@@ -1,44 +1,46 @@
 <template>
-  <div style="position: relative">
+  <div>
 		<router-view></router-view>
-    <div class="app__btns">
-			<my-input
-				:model-value="searchQuery"
-				@update:model-value="setSearchQuery"
-				placeholder=' &#xf002;  Поиск...'
-				v-focus
-				style="margin-left: 20px; font-size: 14px; border-color: #C4C4C4; border-width: 0 0 2px; width: 28%"
-    	/>
-      <my-button
-        @click="showDialog"
-      >
-        Добавить диспетчера
-      </my-button>
-    </div>
-    <my-dialog v-model:show="dialogVisible">
-      <dispetcher-form
-        @create="createDispetcher"
-      />
-    </my-dialog>
-    <dispetcher-list
-      
-      @remove="removeDispetcher"
-      v-if="!isDispetchersLoading"
-    />
-    <my-loading v-else></my-loading>
-    <div class="page__wrapper">
-      <div
-        v-for="pageNumber in totalPages"
-        :key="pageNumber"
-        class="page"
-        :class="{
-              'current-page': page === pageNumber
-            }"
-        @click="setPage(pageNumber)"
-      >
-        {{ pageNumber }}
-      </div>
-    </div>
+		<div v-if="currentRouteName==='dispetchers'">
+			<div class="app__btns">
+				<my-input
+					:model-value="searchQuery"
+					@update:model-value="setSearchQuery"
+					placeholder=' &#xf002;  Поиск...'
+					v-focus
+					style="margin-left: 20px; font-size: 14px; border-color: #C4C4C4; border-width: 0 0 2px; width: 28%"
+				/>
+				<my-button
+					@click="showDialog"
+				>
+					Добавить диспетчера
+				</my-button>
+			</div>
+			<my-dialog v-model:show="dialogVisible">
+				<dispetcher-form
+					@create="createDispetcher"
+				/>
+			</my-dialog>
+			<dispetcher-list
+				
+				@remove="removeDispetcher"
+				v-if="!isDispetchersLoading"
+			/>
+			<my-loading v-else></my-loading>
+			<div class="page__wrapper">
+				<div
+					v-for="pageNumber in totalPages"
+					:key="pageNumber"
+					class="page"
+					:class="{
+								'current-page': page === pageNumber
+							}"
+					@click="setPage(pageNumber)"
+				>
+					{{ pageNumber }}
+				</div>
+			</div>
+		</div>
   </div>
 </template>
 
@@ -108,12 +110,13 @@ export default {
       sortedDispetchers: 'dispetcher/sortedDispetchers',
       sortedAndSearchedDispetchers: 'dispetcher/sortedAndSearchedDispetchers',
       paginatedDispetchers: 'dispetcher/paginatedDispetchers'
-    })
+    }),
+		currentRouteName() {
+			return this.$route.name;
+    }
   },
   watch: {
-    // page() {
-    //   this.fetchDispetchers()
-    // }
+
   }
 }
 </script>
