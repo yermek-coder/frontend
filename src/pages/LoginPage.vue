@@ -1,6 +1,6 @@
 <template>
 	<div class="container">
-		<Form @submit="onSubmit" >
+		<Form @submit="onSubmit" :validation-schema="schema">
 			<h3>Авторизация</h3>
 				<ul class="form-inputs">
 					<li>
@@ -8,10 +8,8 @@
 							v-focus
 							class="input"
 							name="username"
-							@input="setErrorMessage('')"
 							type="text"
 							placeholder="Логин"
-							:rules="validateUsername"
 						/>
 						<ErrorMessage class="ErrorMessage" name="username" />
 					</li>
@@ -22,11 +20,9 @@
 						></div>
 						<Field
 							class="input"
-							@input="setErrorMessage('')"
 							name="password"
 							:type="(passwordIsHidden)?'password':'text'"
 							placeholder="Пароль"
-							:rules="validatePassword"
 						/>
 						<ErrorMessage class="ErrorMessage" name="password" />
 					</li>
@@ -45,10 +41,10 @@
 
 <script>
 import { Form, Field, ErrorMessage } from 'vee-validate';
+import * as yup from 'yup';
 import MyLoadingCircle from "@/components/UI/MyLoadingCircle";
 import MyButtonLarge from "@/components/UI/MyButtonLarge";
 import {mapState, mapActions, mapMutations} from 'vuex';
-//				@click="signIn"  @input="setPassword"
 export default {
   components: {
 		MyLoadingCircle,
@@ -57,6 +53,9 @@ export default {
     Field,
 		ErrorMessage
   },
+	data: () => ({
+    min: 6,
+  }),
   methods: {
     ...mapMutations({
 			setUsername: 'login/setUsername',
@@ -71,26 +70,20 @@ export default {
       this.$store.commit('login/setUsername', values.username);
       this.$store.commit('login/setPassword', values.password);
       this.$store.dispatch('login/signIn');
-    },
-		validateUsername(value) {
-      if (value && value.trim()) {
-				return true;
-      }
-			return 'Поле не должно быть пустым';
-    },
-		validatePassword(value) {
-      if (value && value.trim()) {
-				return true;
-      }
-      return 'Поле не должно быть пустым';
-		}
+    }
 	},
   computed: {
     ...mapState({
       isLoading: state => state.login.isLoading,
       errorMessage: state => state.login.errorMessage,
       passwordIsHidden: state => state.login.passwordIsHidden,
-    })
+    }),
+		schema() {
+			return yup.object({
+				password: yup.string().required('Пустое поле').min(this.min, 'Слишком короткий пароль	'),
+				username: yup.string().required('Пустое поле'),
+			});
+		},
   }
 }
 </script>

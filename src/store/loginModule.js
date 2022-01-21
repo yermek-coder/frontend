@@ -47,6 +47,7 @@ export const loginModule = {
 							const token = response.data.token;
 							localStorage.setItem('token', token);
 							axios.defaults.headers.get['Authorization'] = `Token ${token}`;
+							axios.defaults.headers.post['Authorization'] = `Token ${token}`;
 					} catch (e) {
 							commit('setErrorMessage', 'Неверные данные');
 					} finally {
@@ -60,6 +61,7 @@ export const loginModule = {
 					try {
 						localStorage.removeItem('token');
 						delete axios.defaults.headers.get['Authorization'];
+						delete axios.defaults.headers.post['Authorization'];
 					} catch (e) {
 						alert('Error logging out')
 					} finally {
